@@ -1,0 +1,204 @@
+<?xml version="1.0"?>
+
+<robot name="drobo" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="drobo_sim">
+
+<gazebo>
+ <static>false</static>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/drobo</robotNamespace>
+	<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+        <legacyModeNS>true</legacyModeNS>
+     </plugin>
+    </gazebo>
+
+ <gazebo reference="base_link">
+    <material>Gazebo/Brown</material>
+  </gazebo>
+
+	  <gazebo reference="front_left_wheel1">
+	    <mu1>1.0</mu1>
+	    <mu2>1.0</mu2>
+	    <kp>10000.0</kp>
+	    <kd>10.0</kd>
+	    <minDepth>0.001</minDepth>
+	    <maxVel>1.0</maxVel>
+            <material>Gazebo/Orange</material>
+	  </gazebo>
+	
+	  <gazebo reference="front_left_wheel2">
+	    <mu1>1.0</mu1>
+	    <mu2>1.0</mu2>
+	    <kp>10000.0</kp>
+	    <kd>10.0</kd>
+	    <minDepth>0.001</minDepth>
+	    <maxVel>1.0</maxVel>
+            <material>Gazebo/Orange</material>
+	  </gazebo>
+	  
+	  <gazebo reference="front_right_wheel1">
+	    <mu1>1.0</mu1>
+	    <mu2>1.0</mu2>
+	    <kp>10000.0</kp>
+	    <kd>10.0</kd>
+	    <minDepth>0.001</minDepth>
+	    <maxVel>1.0</maxVel>
+            <material>Gazebo/Orange</material>
+	  </gazebo>
+
+	  <gazebo reference="front_right_wheel2">
+	    <mu1>1.0</mu1>
+	    <mu2>1.0</mu2>
+	    <kp>10000.0</kp>
+	    <kd>10.0</kd>
+	    <minDepth>0.001</minDepth>
+	    <maxVel>1.0</maxVel>
+            <material>Gazebo/Orange</material>
+	  </gazebo>
+
+	  <gazebo reference="back_left_wheel">
+	    <mu1>1.0</mu1>
+	    <mu2>1.0</mu2>
+	    <kp>10000.0</kp>
+	    <kd>10.0</kd>
+	    <minDepth>0.001</minDepth>
+	    <maxVel>1.0</maxVel>
+            <material>Gazebo/Orange</material>
+	  </gazebo>
+
+	  <gazebo reference="back_right_wheel">
+	    <mu1>1.0</mu1>
+	    <mu2>1.0</mu2>
+	    <kp>10000.0</kp>
+	    <kd>10.0</kd>
+	    <minDepth>0.001</minDepth>
+	    <maxVel>1.0</maxVel>
+            <material>Gazebo/Orange</material>
+	  </gazebo>
+	  
+	  <!--<gazebo reference="base_link">
+	    <mu1>0.3</mu1>
+	    <mu2>0.3</mu2>
+	    <sensor type="contact" name="bumpers">
+	      <always_on>1</always_on>
+	      <update_rate>50.0</update_rate>
+	      <visualize>true</visualize>
+	      <contact>
+	        <collision>base_footprint_collision_base_link</collision>
+	      </contact>
+	    </sensor>
+	  </gazebo>-->
+
+	<gazebo reference="imu_link">
+  </gazebo>
+	<!--   <gazebo reference="gyro_link">
+	   <sensor type="imu" name="imu">
+        <always_on>true</always_on>
+        <update_rate>50</update_rate>
+        <visualize>false</visualize>
+        
+    <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
+      <alwaysOn>true</alwaysOn>
+      <bodyName>base_footprint</bodyName>
+      <frameName>imu_link</frameName>
+      <topicName>imu</topicName>
+      <serviceName>imu_service</serviceName>
+      <gaussianNoise>0.0</gaussianNoise>
+      <updateRate>200</updateRate>
+      <imu>
+        <noise>
+          <type>gaussian</type>
+          <rate>
+            <mean>0.0</mean>
+            <stddev>2e-4</stddev>
+            <bias_mean>0.0000075</bias_mean>
+            <bias_stddev>0.0000008</bias_stddev>
+          </rate>
+          <accel>
+            <mean>0.0</mean>
+            <stddev>1.7e-2</stddev>
+            <bias_mean>0.1</bias_mean>
+            <bias_stddev>0.001</bias_stddev>
+          </accel>
+        </noise>
+      </imu>
+    </plugin>
+      </sensor>
+	  </gazebo>-->
+
+	
+	<!--  <gazebo>
+	    <plugin name="kobuki_controller" filename="libgazebo_ros_kobuki.so">
+	      <publish_tf>1</publish_tf>
+	      <left_wheel_joint_name>wheel_left_joint</left_wheel_joint_name>
+	      <right_wheel_joint_name>wheel_right_joint</right_wheel_joint_name>
+	      <wheel_separation>.30</wheel_separation>
+	      <wheel_diameter>0.09</wheel_diameter>
+	      <torque>18.0</torque>
+	      <velocity_command_timeout>0.6</velocity_command_timeout>
+	      <cliff_sensor_left_name>cliff_sensor_left</cliff_sensor_left_name>
+	      <cliff_sensor_center_name>cliff_sensor_front</cliff_sensor_center_name>
+	      <cliff_sensor_right_name>cliff_sensor_right</cliff_sensor_right_name>
+	      <cliff_detection_threshold>0.04</cliff_detection_threshold>
+	      <bumper_name>bumpers</bumper_name>
+        <imu_name>imu</imu_name>
+	    </plugin>
+	  </gazebo>-->
+
+<!--Gazebo Differential Drive Plugin-->
+<!--<gazebo>
+  <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+    <alwaysOn>true</alwaysOn>
+    <legacyMode>false</legacyMode>
+    <updateRate>40</updateRate>
+    <leftJoint>left_wheel</leftJoint>
+    <rightJoint>right_wheel</rightJoint>
+    <wheelSeparation>0.5</wheelSeparation>
+    <wheelDiameter>${wheel_radius*2}</wheelDiameter>
+    <torque>20</torque>
+    <commandTopic>cmd_vel</commandTopic>
+    <odometryTopic>odom</odometryTopic>
+    <odometryFrame>odom</odometryFrame>
+    <robotBaseFrame>base_footprint</robotBaseFrame>
+    <publishWheelTF>false</publishWheelTF>
+    <publishWheelJointState>true</publishWheelJointState>
+    <rosDebugLevel>na</rosDebugLevel>
+    <wheelAcceleration>1</wheelAcceleration>
+    <wheelTorque>5</wheelTorque>
+    <odometrySource>world</odometrySource>
+    <publishTf>false</publishTf>
+    <publishOdomTF>true</publishOdomTF>
+    <rosDebugLevel>na</rosDebugLevel>
+  </plugin>
+</gazebo>
+
+<gazebo>
+  <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
+    <updateRate>100.0</updateRate>
+    <robotNamespace>/</robotNamespace>
+    <leftFrontJoint>front_left_wheel_joint</leftFrontJoint>
+    <rightFrontJoint>front_right_wheel_joint</rightFrontJoint>
+    <leftRearJoint>back_left_wheel_joint</leftRearJoint>
+    <rightRearJoint>back_right_wheel_joint</rightRearJoint>
+    <wheelSeparation>0.4</wheelSeparation>
+    <wheelDiameter>0.215</wheelDiameter>
+    <robotBaseFrame>base_link</robotBaseFrame>
+    <torque>20</torque>
+    <topicName>cmd_vel</topicName>
+    <broadcastTF>false</broadcastTF>
+  </plugin>
+</gazebo>-->
+
+<gazebo>
+  <plugin name="drobo_steering" filename="libgazebo_ros_planar_move.so">
+    <commandTopic>cmd_vel</commandTopic>
+    <odometryTopic>odom</odometryTopic>
+    <odometryFrame>odom</odometryFrame>
+    <odometryRate>50</odometryRate>
+    <robotBaseFrame>base_footprint</robotBaseFrame>
+    <publishTF>false</publishTF>
+  </plugin>
+</gazebo>
+
+  </xacro:macro>
+</robot>

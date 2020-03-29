@@ -1,0 +1,21 @@
+<launch>
+  
+  <arg name="urdf_file" default="$(find xacro)/xacro '$(find drobo_description)/urdf/drobo.xacro' " />
+  <param name="robot_description" command="$(arg urdf_file)" />
+  
+  <!-- Gazebo model spawner -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+        args="-unpause -urdf -param robot_description -model mobile_base"/>
+
+  <!-- Velocity muxer -->
+  <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>
+  <node pkg="nodelet" type="nodelet" name="cmd_vel_mux"
+        args="load yocs_cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager">
+    <param name="yaml_cfg_file" value="$(find drobo_bringup)/param/mux.yaml" />
+    <remap from="cmd_vel_mux/output" to="cmd_vel"/>
+  <!--  <remap from="/mobile_base_nodelet_manager" to="/cmd_vel">-->
+  </node>
+
+  <!-- Bumper/cliff to pointcloud (not working, as it needs sensors/core messages) 
+  <include file="$(find turtlebot_bringup)/launch/includes/kobuki/bumper2pc.launch.xml"/>-->
+</launch>

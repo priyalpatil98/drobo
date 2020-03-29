@@ -1,0 +1,41 @@
+digraph G {
+node [shape=box];
+"base_link" [label="base_link"];
+"back_left_pipe" [label="back_left_pipe"];
+"back_left_wheel" [label="back_left_wheel"];
+"back_right_pipe" [label="back_right_pipe"];
+"back_right_wheel" [label="back_right_wheel"];
+"front_left_pipe" [label="front_left_pipe"];
+"front_left_pipe1" [label="front_left_pipe1"];
+"front_left_wheel1" [label="front_left_wheel1"];
+"front_left_pipe2" [label="front_left_pipe2"];
+"front_left_wheel2" [label="front_left_wheel2"];
+"front_right_pipe" [label="front_right_pipe"];
+"front_right_pipe1" [label="front_right_pipe1"];
+"front_right_pipe2" [label="front_right_pipe2"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"base_link" -> "base_to_back_left_pipe" [label="xyz: 0 0.1 1 \nrpy: 0 -0 0"]
+"base_to_back_left_pipe" -> "back_left_pipe"
+"back_left_pipe" -> "back_left_pipe_to_back_left_wheel" [label="xyz: 0 0.1 1 \nrpy: 0 -0 0"]
+"back_left_pipe_to_back_left_wheel" -> "back_left_wheel"
+"base_link" -> "base_to_back_right_pipe" [label="xyz: 0 0.1 1 \nrpy: 0 -0 0"]
+"base_to_back_right_pipe" -> "back_right_pipe"
+"back_right_pipe" -> "back_right_pipe_to_back_right_wheel" [label="xyz: 0 0.1 1 \nrpy: 0 -0 0"]
+"back_right_pipe_to_back_right_wheel" -> "back_right_wheel"
+"base_link" -> "base_to_front_left_pipe" [label="xyz: 0 0.1 1 \nrpy: 0 -0 0"]
+"base_to_front_left_pipe" -> "front_left_pipe"
+"front_left_pipe" -> "front_left_pipe_to_front_left_pipe1" [label="xyz: 0 0.1 1 \nrpy: 0 -0 0"]
+"front_left_pipe_to_front_left_pipe1" -> "front_left_pipe1"
+"front_left_pipe1" -> "front_left_pipe1_to_front_left_wheel1" [label="xyz: 0 0.1 1 \nrpy: 0 -0 0"]
+"front_left_pipe1_to_front_left_wheel1" -> "front_left_wheel1"
+"front_left_pipe" -> "front_left_pipe_to_front_left_pipe2" [label="xyz: 0 0.1 1 \nrpy: 0 -0 0"]
+"front_left_pipe_to_front_left_pipe2" -> "front_left_pipe2"
+"front_left_pipe2" -> "front_left_pipe2_to_front_left_wheel2" [label="xyz: 0 0.1 1 \nrpy: 0 -0 0"]
+"front_left_pipe2_to_front_left_wheel2" -> "front_left_wheel2"
+"base_link" -> "base_to_front_right_pipe" [label="xyz: 0 0.1 1 \nrpy: 0 -0 0"]
+"base_to_front_right_pipe" -> "front_right_pipe"
+"front_right_pipe" -> "front_right_pipe_to_front_right_pipe1" [label="xyz: 0 0.1 1 \nrpy: 0 -0 0"]
+"front_right_pipe_to_front_right_pipe1" -> "front_right_pipe1"
+"front_right_pipe" -> "front_right_pipe_to_front_right_pipe2" [label="xyz: 0 0.1 1 \nrpy: 0 -0 0"]
+"front_right_pipe_to_front_right_pipe2" -> "front_right_pipe2"
+}

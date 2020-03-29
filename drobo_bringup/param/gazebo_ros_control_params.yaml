@@ -1,0 +1,11 @@
+  topics:
+    - topic: diff_drive_control/cmd_vel
+      type: geometry_msgs/Twist
+
+#  gazebo_ros_control/pid_gains:
+#    front_left_pipe1_to_front_left_wheel1: {p: 1.0, i: 0.0, d: 1.0}
+#    front_left_pipe2_to_front_left_wheel2: {p: 1.0, i: 0.0, d: 1.0}
+#    front_right_pipe1_to_front_right_wheel1: {p: 1.0, i: 0.0, d: 1.0}
+#    front_right_pipe2_to_front_right_wheel2: {p: 1.0, i: 0.0, d: 1.0}
+#    back_left_pipe_to_back_left_wheel: {p: 1.0, i: 0.0, d: 1.0}
+#    back_right_pipe_to_back_right_wheel: {p: 1.0, i: 0.0, d: 1.0}-->

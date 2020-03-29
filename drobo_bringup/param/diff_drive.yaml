@@ -1,0 +1,81 @@
+diff_drive_control: 
+  type: "diff_drive_controller/DiffDriveController"
+  publish_rate: 50
+
+  left_wheel: ['base_to_front_left_wheel1', 'base_to_front_left_wheel2', 'base_to_back_left_wheel']
+  right_wheel: ['base_to_front_right_wheel1', 'base_to_front_right_wheel2', 'base_to_back_right_wheel']
+
+  wheel_separation: 0.5
+  enable_odom_tf: true
+  publish_cmd: true
+  cmd_vel_timeout: 0.25
+  odom_frame_id: odom
+
+  # Odometry covariances for the encoder output of the robot. These values should
+  # be tuned to your robot's sample odometry data, but these values are a good place
+  # to start
+  pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 0.03]
+  twist_covariance_diagonal: [0.001, 0.001, 0.001, 1000000.0, 1000000.0, 0.03]
+
+  # Top level frame (link) of the robot description
+  base_frame_id: base_footprint
+
+
+  # Velocity and acceleration limits for the robot
+  linear:
+    x:
+      has_velocity_limits    : true
+      max_velocity           : 0.2   # m/s
+      has_acceleration_limits: true
+      max_acceleration       : 0.6   # m/s^2
+  angular:
+    z:
+      has_velocity_limits    : true
+      max_velocity           : 2.0   # rad/s
+      has_acceleration_limits: true
+      max_acceleration       : 6.0   # rad/s^2
+
+joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+front_left_wheel1_velocity_controller:
+    type: effort_controllers/JointEffortController
+    joint: base_to_front_left_wheel1 
+    pid: {p: 00.1, i: 0.00001, d: 0.0001}
+
+front_left_wheel2_velocity_controller:
+    type: effort_controllers/JointEffortController
+    joint: base_to_front_left_wheel2
+    pid: {p: 00.1, i: 0.00001, d: 0.0001}
+
+front_right_wheel1_velocity_controller:
+    type: effort_controllers/JointEffortControllerr
+    joint: base_to_front_right_wheel1
+    pid: {p: 00.1, i: 0.00001, d: 0.0001}
+
+front_right_wheel2_velocity_controller:
+    type: effort_controllers/JointEffortController
+    joint: base_to_front_right_wheel2 
+    pid: {p: 00.1, i: 0.00001, d: 0.0001}
+
+back_left_wheel_velocity_controller:
+    type: effort_controllers/JointEffortController
+    joint: base_to_back_left_wheel
+    pid: {p: 00.1, i: 0.00001, d: 0.0001}
+
+back_right_wheel_velocity_controller:
+    type: effort_controllers/JointEffortController
+    joint: base_to_back_right_wheel
+    pid: {p: 00.1, i: 0.00001, d: 0.0001}
+
+#pid_gains:
+#    type: transmission_interface/SimpleTransmission
+#    front_left_pipe1_to_front_left_wheel1: {p: 1.0, i: 0.0, d: 1.0}
+#    front_left_pipe2_to_front_left_wheel2: {p: 1.0, i: 0.0, d: 1.0}
+#    back_right_pipe_to_back_right_wheel: {p: 1.0, i: 0.0, d: 1.0}
+#    front_right_pipe1_to_front_right_wheel1: {p: 1.0, i: 0.0, d: 1.0}
+#    front_right_pipe2_to_front_right_wheel2: {p: 1.0, i: 0.0, d: 1.0}
+#    back_left_pipe_to_back_left_wheel: {p: 1.0, i: 0.0, d: 1.0}
+
+

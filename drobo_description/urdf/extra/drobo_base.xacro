@@ -1,0 +1,909 @@
+<?xml version="1.0"?>
+<robot name="drobo" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!--<xacro:include filename="$(find drobo_description)/urdf/drobo.urdf" />-->
+<xacro:include filename="$(find drobo_description)/urdf/materials.xacro" />
+<!--<xacro:include filename="$(find drobo_description)/urdf/kinect.urdf.xacro" />-->
+<xacro:include filename="$(find drobo_description)/urdf/drobo_library.urdf.xacro" />
+<xacro:include filename="$(find drobo_description)/urdf/drobo_base_gazebo.urdf.xacro" />
+<xacro:include filename="$(find drobo_description)/urdf/drobo_gazebo.urdf.xacro" />
+
+    <xacro:property name="width" value="1" />
+    <xacro:property name="height" value="0.2" />
+    <xacro:property name="depth" value="1" />
+
+<xacro:property name="pipe_length1" value="0.65"/>
+<xacro:property name="pipe_length" value="0.5"/>
+<xacro:property name="pipe_radius" value="0.05"/>
+<xacro:property name="back_pipe_length" value="0.95"/>
+
+<xacro:property name="wheel_length1" value="0.1"/>
+<xacro:property name="wheel_radius1" value="0.25"/>
+<xacro:property name="wheel_length" value="0.050"/>
+<xacro:property name="wheel_radius" value="0.05"/>
+
+<xacro:property name="M_PI" value="3.1415926535897931" />
+
+  <xacro:macro name="cylinder_inertia" params="m r h">
+            <mass value="${m}" />
+            <origin  xyz="0 0 0" rpy="0 1.57 1.57" />
+            <inertia  ixx="${m*(3*r*r+h*h)/12}" ixy = "0" ixz = "0"
+                      iyy="${m*(3*r*r+h*h)/12}" iyz = "0"
+                      izz="${m*r*r/2}" /> 
+  </xacro:macro>
+
+<xacro:macro name="box_inertia" params="m w h d">
+          <mass value="${m}" />
+          <inertia
+            ixx="${m / 12.0 * (d*d + h*h)}" ixy="0.0" ixz="0.0"
+            iyy="${m / 12.0 * (w*w + h*h)}" iyz="0.0"
+            izz="${m / 12.0 * (w*w + d*d)}"/>
+  </xacro:macro>     
+
+<!--   <xacro:macro name="default_inertial" params="mass">
+            <inertial>
+                    <mass value="${mass}" />
+                     <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+                        iyy="1.0" iyz="0.0"
+                         izz="1.0" />
+            </inertial>
+        </xacro:macro>
+
+        <xacro:macro name="inertial" params="mass1">
+            <inertial>
+                    <mass value="${mass1}" />
+                     <inertia ixx="0.14684" ixy="0.000360999999999999" ixz="0.014859"
+                        iyy="0.24756" iyz="4.36779999999948E-05"
+                         izz="0.33302" />
+            </inertial>
+        </xacro:macro>-->
+
+
+//base link-----------------------------------------------
+
+<xacro:macro name="dbot">   
+  </xacro:macro>
+    <link name="base_footprint">
+            <visual>
+                <geometry>
+                   <box size="0.001 0.001 0.001"/>
+                </geometry>
+                 <origin  xyz="0 0 0" rpy="0 0 0" />   
+            </visual>
+
+    <joint name="base_joint" type="fixed">
+      <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0" />
+      <parent link="base_footprint"/>
+      <child link="base_link" />
+    </joint>
+
+<link name="base_link">
+          <origin xyz="0 0 0" rpy="0 0 0" />
+            <visual>
+                <geometry>
+                   <mesh filename="package://drobo_description/meshes/body.dae"/>
+                </geometry>
+                 <origin  xyz="0 0 0" rpy="0 0 0" />
+                 <material name="brown"/>
+            </visual>
+           <collision>
+               <geometry>
+                  <mesh filename="package://drobo_description/meshes/body.dae"/>>
+               </geometry>
+                <origin  xyz="0 0 0" rpy="0 0 0" />
+           </collision>
+<inertial>
+           <xacro:box_inertia m="5" w="${width}" h="${height}" d="${depth}" />
+</inertial>
+       </link>
+
+ <link name="kinect">
+        <visual>
+            <geometry>
+                <mesh filename="package://drobo_description/meshes/kinect.dae"/>
+            </geometry>
+           <!--<material name="brown"/>-->
+           <origin xyz="0 0 0" rpy="0 0 0" />
+       </visual>
+      <!-- <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+           <geometry>
+               <mesh filename="package://drobo_description/meshes/kinect.dae"/>
+           </geometry>
+       </collision>-->
+   </link>
+
+       <joint name="base_to_kinect" type="fixed">
+           <parent link="base_link"/>
+           <child link="kinect"/>
+           <origin rpy="0 0 1.55" xyz="0 0.0 0.29"/>
+           <axis xyz="0 0 0"/>
+       </joint>
+   
+<link name="front_left_wheel1">
+            <visual>
+                <geometry>
+                   <mesh filename="package://drobo_description/meshes/wheel.dae"/>
+                </geometry>
+                 <origin  xyz="0 0 0" rpy="0 0 0" />
+                <material name="black"/>
+            </visual>
+           <collision>
+               <geometry>
+                  <mesh filename="package://drobo_description/meshes/wheel.dae"/>>
+               </geometry>
+                <origin  xyz="0 0 0" rpy="0 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="base_to_front_left_wheel1" type="continuous">
+           <parent link="base_link"/>
+           <child link="front_left_wheel1"/>
+           <limit effort="100" velocity="100"/>
+           <joint_properties damping="0.0" friction="0.0"/>
+           <dynamics damping="50" friction="1"/>
+           <axis xyz="0 1 0"/>
+           <origin rpy="0 0 0" xyz="0.275 -0.14 ${wheel_radius}"/>
+       </joint>
+
+<transmission name="front_left_tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_front_left_wheel1">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_left_motor1">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+        <motorTorqueConstant>1</motorTorqueConstant>
+    </actuator>
+</transmission>
+
+<link name="front_left_wheel2">
+            <visual>
+                <geometry>
+                   <mesh filename="package://drobo_description/meshes/wheel.dae"/>
+                </geometry>
+                 <origin  xyz="0 0 0" rpy="0 0 0" />
+                 <material name="black"/>
+            </visual>
+           <collision>
+               <geometry>
+                  <mesh filename="package://drobo_description/meshes/wheel.dae"/>>
+               </geometry>
+                <origin  xyz="0 0 0" rpy="0 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="base_to_front_left_wheel2" type="continuous">
+           <parent link="base_link"/>
+           <child link="front_left_wheel2"/>
+           <limit effort="100" velocity="100"/>
+           <joint_properties damping="0.0" friction="0.0"/>
+           <dynamics damping="50" friction="1"/>
+           <axis xyz="0 1 0"/>
+           <origin rpy="0 0 0" xyz="0.075 -0.14 ${wheel_radius}"/>
+       </joint>
+
+<transmission name="front_left_tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_front_left_wheel2">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_left_motor2">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+        <motorTorqueConstant>1</motorTorqueConstant>
+    </actuator>
+</transmission>
+
+
+<link name="front_right_wheel1">
+            <visual>
+                <geometry>
+                   <mesh filename="package://drobo_description/meshes/wheel.dae"/>
+                </geometry>
+                 <origin  xyz="0 0 0" rpy="0 0 0" />
+                 <material name="black"/>
+            </visual>
+           <collision>
+               <geometry>
+                  <mesh filename="package://drobo_description/meshes/wheel.dae"/>>
+               </geometry>
+                <origin  xyz="0 0 0" rpy="0 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="base_to_front_right_wheel1" type="continuous">
+           <parent link="base_link"/>
+           <child link="front_right_wheel1"/>
+           <limit effort="100" velocity="100"/>
+           <joint_properties damping="0.0" friction="0.0"/>
+           <dynamics damping="50" friction="1"/>
+           <axis xyz="0 1 0"/>
+           <origin rpy="0 0 0" xyz="0.275 0.14 ${wheel_radius}"/>
+       </joint>
+
+<transmission name="front_right_tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_front_right_wheel1">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_right_motor1">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+        <motorTorqueConstant>1</motorTorqueConstant>
+    </actuator>
+</transmission>
+
+<link name="front_right_wheel2">
+            <visual>
+                <geometry>
+                   <mesh filename="package://drobo_description/meshes/wheel.dae"/>
+                </geometry>
+                 <origin  xyz="0 0 0" rpy="0 0 0" />
+                 <material name="black"/>
+            </visual>
+           <collision>
+               <geometry>
+                  <mesh filename="package://drobo_description/meshes/wheel.dae"/>>
+               </geometry>
+                <origin  xyz="0 0 0" rpy="0 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="base_to_front_right_wheel2" type="continuous">
+           <parent link="base_link"/>
+           <child link="front_right_wheel2"/>
+           <limit effort="100" velocity="100"/>
+           <joint_properties damping="0.0" friction="0.0"/>
+           <dynamics damping="50" friction="1"/>
+           <axis xyz="0 1 0"/>
+           <origin rpy="0 0 0" xyz="0.075 0.14 ${wheel_radius}"/>
+       </joint>
+
+<transmission name="front_right_tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_front_right_wheel2">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_right_motor2">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+        <motorTorqueConstant>1</motorTorqueConstant>
+    </actuator>
+</transmission>
+
+
+<link name="back_left_wheel">
+          <origin xyz="0 0 0" rpy="0 0 0" />
+            <visual>
+                <geometry>
+                   <mesh filename="package://drobo_description/meshes/wheel.dae"/>
+                </geometry>
+                 <origin  xyz="0 0 0" rpy="0 0 0" />
+                 <material name="black"/>
+            </visual>
+           <collision>
+               <geometry>
+                  <mesh filename="package://drobo_description/meshes/wheel.dae"/>>
+               </geometry>
+                <origin  xyz="0 0 0" rpy="0 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="base_to_back_left_wheel" type="continuous">
+           <parent link="base_link"/>
+           <child link="back_left_wheel"/>
+           <limit effort="100" velocity="100"/>
+           <joint_properties damping="0.0" friction="0.0"/>
+           <dynamics damping="50" friction="1"/>
+           <axis xyz="0 1 0"/>
+           <origin rpy="0 0 0" xyz="-0.275 -0.14 ${wheel_radius}"/>
+       </joint>
+
+<transmission name="back_left_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_back_left_wheel">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="back_left_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+        <motorTorqueConstant>1</motorTorqueConstant>
+    </actuator>
+</transmission>
+
+<link name="back_right_wheel">
+            <visual>
+                <geometry>
+                   <mesh filename="package://drobo_description/meshes/wheel.dae"/>
+                </geometry>
+                 <origin  xyz="0 0 0" rpy="0 0 0" />
+                 <material name="black"/>
+            </visual>
+           <collision>
+               <geometry>
+                  <mesh filename="package://drobo_description/meshes/wheel.dae"/>>
+               </geometry>
+                <origin  xyz="0 0 0" rpy="0 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="base_to_back_right_wheel" type="continuous">
+           <parent link="base_link"/>
+           <child link="back_right_wheel"/>
+           <limit effort="100" velocity="100"/>
+           <joint_properties damping="0.0" friction="0.0"/>
+           <dynamics damping="50" friction="1"/>
+           <axis xyz="0 1 0"/>
+           <origin rpy="0 0 0" xyz="-0.275 0.14 ${wheel_radius}"/>
+       </joint>
+
+<transmission name="back_right_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_back_right_wheel">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="back_right_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+        <motorTorqueConstant>1</motorTorqueConstant>
+    </actuator>
+</transmission>
+
+<joint name="gyro_joint" type="fixed">
+      <axis xyz="0 1 0"/>
+      <origin xyz="0.056 0.062 0.0202" rpy="0 0 0"/>
+      <parent link="base_link"/>
+      <child link="gyro_link"/>
+    </joint>
+    <link name="gyro_link">
+      <inertial>
+        <mass value="0.001"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.0001" ixy="0" ixz="0" 
+                 iyy="0.000001" iyz="0"
+                 izz="0.0001"/>
+      </inertial>
+    </link>
+
+ <!-- drobo Gazebo simulation details -->
+    <drobo_sim />
+    <drobo_sim_3dsensor/>
+</robot>
+
+
+
+    <!--<link name="base_link">
+      <origin xyz="0 0 1" rpy="1.57 0 0" />
+        <visual>
+            <geometry>
+                <box size= "${width} ${height} ${depth}"/>
+            </geometry>
+           <material name="brown"/>
+           <origin xyz="0 0 0.95" rpy="1.5707963267949 0 0" />
+       </visual>
+       <collision>
+            <origin xyz="0 0 0.95" rpy="1.5707963267949 0 0" />
+           <geometry>
+               <box size= "${width} ${height} ${depth}"/>
+           </geometry>
+       </collision>
+<inertial>
+           <xacro:box_inertia m="5" w="${width}" h="${height}" d="${depth}" />
+</inertial>
+   </link>
+
+    <link name="kinect">
+      <origin xyz="0 0 1.085" rpy="6.28 0 3.14" />
+        <visual>
+            <geometry>
+                <mesh filename="package://drobo_description/meshes/kinect.dae"/>
+            </geometry>
+           <material name="brown"/>
+           <origin xyz="0 0 1.085" rpy="6.28 0 3.14" />
+       </visual>
+       <collision>
+            <origin xyz="0 0 1.085" rpy="6.28 0 3.14" />
+           <geometry>
+               <mesh filename="package://drobo_description/meshes/kinect.dae"/>
+           </geometry>
+       </collision>
+   </link>
+
+       <joint name="base_to_kinect" type="fixed">
+           <parent link="base_link"/>
+           <child link="kinect"/>
+           <origin rpy="0 0 0" xyz="0.00 0.0 0.0"/>
+       </joint>
+
+//front left
+
+        <link name="front_left_pipe">
+          <origin
+             xyz="0 1 1"
+             rpy="0 0 0" />
+            <visual>
+                <geometry>
+                   <cylinder length="${pipe_length1}" radius="${pipe_radius}"/>
+                </geometry>
+                 <origin  xyz="0.56 0.6 0.78" rpy="-2.3 0 0" />
+                <material name="white"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${pipe_length1}" radius="${pipe_radius}"/>
+               </geometry>
+                <origin  xyz="0.56 0.6 0.78" rpy="-2.3 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="1" r="${pipe_radius}" h="${pipe_length1}"/>
+</inertial>
+       </link>
+   
+       <joint name="base_to_front_left_pipe" type="fixed">
+           <parent link="base_link"/>
+           <child link="front_left_pipe"/>
+           <origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+       </joint>
+
+ <link name="front_left_pipe1">
+          <origin xyz="0 1 1" rpy="0 0 0" />
+            <visual>
+                <geometry>
+                   <cylinder length="${pipe_length}" radius="${pipe_radius}"/>
+                </geometry>
+                 <origin xyz="0.56 1 0.38" rpy="-2.3 0 0" />
+                <material name="white"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${pipe_length}" radius="${pipe_radius}"/>
+               </geometry>
+                <origin xyz="0.56 1 0.38" rpy="-2.3 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="1" r="${pipe_radius}" h="${pipe_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="front_left_pipe_to_front_left_pipe1" type="fixed">
+           <parent link="front_left_pipe"/>
+           <child link="front_left_pipe1"/>
+           <origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+       </joint>
+
+<link name="front_left_pipe2">
+        <origin xyz="0 1 1"  rpy="0 0 0" />
+            <visual>
+                <geometry>
+                  <cylinder length="${pipe_length}" radius="${pipe_radius}"/>
+                </geometry>
+                  <origin  xyz="0.56 0.7 0.38" rpy="2.3 0 0"/>
+                <material name="white"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${pipe_length}" radius="${pipe_radius}"/>
+               </geometry>
+               <origin xyz="0.56 0.7 0.38" rpy="2.3 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="1" r="${pipe_radius}" h="${pipe_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="front_left_pipe1_to_front_left_pipe2" type="fixed">
+           <parent link="front_left_pipe1"/>
+           <child link="front_left_pipe2"/>
+           <origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+       </joint>
+
+<link name="front_left_wheel1">
+         <origin xyz="0 0.1 1" rpy="0 0 0" />
+            <visual>
+                <geometry>
+                  <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+              <mesh filename="package://drobo_description/meshes/wheel.dae"/>
+                </geometry>
+                 <origin xyz="0.65 1.15 ${wheel_radius}" rpy="1.57 0 1.57" />
+                <material name="black"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+              <mesh filename="package://drobo_description/meshes/wheel.dae"/>
+               </geometry>
+               <origin xyz="0.65 1.15 ${wheel_radius}" rpy="1.57 0 1.57"  />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_length}"/>
+</inertial>
+       </link>
+
+   
+       <joint name="front_left_pipe1_to_front_left_wheel1" type="continuous">
+           <parent link="front_left_pipe1"/>
+           <child link="front_left_wheel1"/>
+           <limit effort="100" velocity="100"/>
+           <joint_properties damping="0.0" friction="0.0"/>
+           <dynamics damping="50" friction="1"/>
+           <axis xyz="1 0 0"/>
+           <origin rpy="0 0 0" xyz="0.01 -0.005 0"/>
+       </joint>
+
+<transmission name="front_left_tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_left_pipe1_to_front_left_wheel1">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_left_motor1"/>
+    <mechanicalReduction>1</mechanicalReduction>
+    <motorTorqueConstant>1</motorTorqueConstant>
+</transmission>
+
+<link name="front_left_wheel2">
+          <origin xyz="0 0.1 1" rpy="0 1 0" />
+            <visual>
+                <geometry>
+                  <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+                </geometry>
+                  <origin xyz="0.65 0.55 ${wheel_radius}" rpy="1.57 0 1.57"  />
+                <material name="black"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+               </geometry>
+               <origin xyz="0.65 0.55 ${wheel_radius}" rpy="1.57 0 1.57"  />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="front_left_pipe2_to_front_left_wheel2" type="continuous">
+           <parent link="front_left_pipe2"/>
+           <child link="front_left_wheel2"/>
+           <limit effort="100" velocity="100"/>
+           <joint_properties damping="0.0" friction="0.0"/>
+           <dynamics damping="50" friction="1"/>
+           <axis xyz="1 0 0"/>
+           <origin rpy="0 0 0" xyz="0.01 -0.005 0"/>
+       </joint>
+
+<transmission name="front_left_tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_left_pipe2_to_front_left_wheel2">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_left_motor2"/>
+    <mechanicalReduction>1</mechanicalReduction>
+    <motorTorqueConstant>1</motorTorqueConstant>
+</transmission>
+
+
+//front right
+
+<link name="front_right_pipe">
+          <origin xyz="0 0.1 1" rpy="0 1 0" />
+            <visual>
+                <geometry>
+                   <cylinder length="${pipe_length1}" radius="${pipe_radius}"/>
+                </geometry>
+                 <origin xyz="-0.56 0.6 0.78" rpy="-2.3 0 0"/>
+                <material name="white"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${pipe_length1}" radius="${pipe_radius}"/>
+               </geometry>
+                <origin  xyz="-0.56 0.6 0.78" rpy="-2.3 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="1" r="${pipe_radius}" h="${pipe_length1}"/>
+</inertial>
+       </link>
+   
+       <joint name="base_to_front_right_pipe" type="fixed">
+           <parent link="base_link"/>
+           <child link="front_right_pipe"/>
+           <origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+           <axis xyz="1 10 1" />
+       </joint>
+
+<link name="front_right_pipe1">
+          <origin xyz="0 1 1" rpy="0 0 0" />
+            <visual>
+                <geometry>
+                   <cylinder length="${pipe_length}" radius="${pipe_radius}"/>
+                </geometry>
+                 <origin xyz="-0.56 1 0.38" rpy="-2.3 0 0"  />
+                <material name="white"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${pipe_length}" radius="${pipe_radius}"/>
+               </geometry>
+                <origin xyz="-0.56 1 0.38" rpy="-2.3 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="1" r="${pipe_radius}" h="${pipe_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="front_right_pipe_to_front_right_pipe1" type="fixed">
+           <parent link="front_right_pipe"/>
+           <child link="front_right_pipe1"/>
+           <origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+           <axis xyz="1 10 1" />
+       </joint>
+
+<link name="front_right_pipe2">
+          <origin xyz="0 1 1" rpy="0 0 0" />
+            <visual>
+                <geometry>
+                   <cylinder length="${pipe_length}" radius="${pipe_radius}"/>
+                </geometry>
+                 <origin xyz="-0.56 0.7 0.38" rpy="2.3 0 0"  />
+                <material name="white"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${pipe_length}" radius="${pipe_radius}"/>
+               </geometry>
+                <origin xyz="-0.56 0.7 0.38" rpy="2.3 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="1" r="${pipe_radius}" h="${pipe_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="front_right_pipe_to_front_right_pipe2" type="fixed">
+           <parent link="front_right_pipe"/>
+           <child link="front_right_pipe2"/>
+           <origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+           <axis xyz="1 10 1" />
+       </joint>
+
+<link name="front_right_wheel1">
+         <origin xyz="0 0.1 1" rpy="0 1 0"  />
+            <visual>
+                <geometry>
+                  <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+                </geometry>
+                 <origin xyz="-0.65 1.15 ${wheel_radius}" rpy="1.57 0 1.57"/>
+                <material name="black"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+               </geometry>
+               <origin xyz="-0.65 1.15 ${wheel_radius}" rpy="1.57 0 1.57" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="front_right_pipe1_to_front_right_wheel1" type="continuous">
+           <parent link="front_right_pipe1"/>
+           <child link="front_right_wheel1"/>
+           <limit effort="100" velocity="100"/>
+           <joint_properties damping="0.0" friction="0.0"/>
+           <dynamics damping="50" friction="1"/>
+           <axis xyz="1 0 0"/>
+           <origin rpy="0 0 0" xyz="0.01 -0.005 0"/>
+       </joint>
+
+<transmission name="front_right_tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_right_pipe1_to_front_right_wheel1">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_right_motor1"/>
+    <mechanicalReduction>1</mechanicalReduction>
+    <motorTorqueConstant>1</motorTorqueConstant>
+</transmission>
+
+<link name="front_right_wheel2">
+         <origin xyz="0 0.1 1" rpy="0 1 0"  />
+            <visual>
+                <geometry>
+                  <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+                </geometry>
+                 <origin xyz="-0.65 0.55 ${wheel_radius}" rpy="1.57 0 1.57" />
+                <material name="black"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+               </geometry>
+               <origin xyz="-0.65 0.55 ${wheel_radius}" rpy="1.57 0 1.57"/>
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="front_right_pipe2_to_front_right_wheel2" type="continuous">
+           <parent link="front_right_pipe2"/>
+           <child link="front_right_wheel2"/>
+           <limit effort="100" velocity="100"/>
+           <joint_properties damping="0.0" friction="0.0"/>
+           <dynamics damping="50" friction="1"/>
+           <axis xyz="1 0 0"/>
+           <origin rpy="0 0 0" xyz="0.01 -0.005 0"/>
+       </joint>
+
+<transmission name="front_right_tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_right_pipe2_to_front_right_wheel2">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_right_motor2"/>
+    <mechanicalReduction>1</mechanicalReduction>
+    <motorTorqueConstant>1</motorTorqueConstant>
+</transmission>
+
+
+//back left
+
+<link name="back_left_pipe">
+          <origin xyz="0 0.1 1" rpy="0 1 0" />
+            <visual>
+                <geometry>
+                   <cylinder length="${back_pipe_length}" radius="${pipe_radius}"/>
+                </geometry>
+                 <origin  xyz="0.56 -0.7 0.6" rpy="2.4 0 0" />
+                <material name="white"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${back_pipe_length}" radius="${pipe_radius}"/>
+               </geometry>
+                <origin  xyz="0.56 -0.7 0.6" rpy="2.4 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="1" r="${pipe_radius}" h="${pipe_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="base_to_back_left_pipe" type="fixed">
+           <parent link="base_link"/>
+           <child link="back_left_pipe"/>
+           <origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+           <axis xyz="0 1 1" />
+       </joint>
+
+<link name="back_left_wheel">
+         <origin xyz="0 0.1 1" rpy="0 1 0"  />
+            <visual>
+                <geometry>
+                  <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+                </geometry>
+                 <origin xyz="0.65 -1 ${wheel_radius}" rpy="1.57 0 1.57"/>
+                <material name="black"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+               </geometry>
+               <origin xyz="0.65 -1 ${wheel_radius}" rpy="1.57 0 1.57" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="back_left_pipe_to_back_left_wheel" type="continuous">
+           <parent link="back_left_pipe"/>
+           <child link="back_left_wheel"/>
+           <limit effort="100" velocity="100"/>
+           <joint_properties damping="0.0" friction="0.0"/>
+           <dynamics damping="50" friction="1"/>
+           <axis xyz="1 0 0" />
+           <origin rpy="0 0 0" xyz="0.01 -0.005 0"/>
+       </joint>
+
+<transmission name="back_left_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="back_left_pipe_to_back_left_wheel">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="back_left_motor"/>
+    <mechanicalReduction>1</mechanicalReduction>
+    <motorTorqueConstant>1</motorTorqueConstant>
+</transmission>
+
+//back right
+
+<link name="back_right_pipe">
+          <origin xyz="0 0.1 1" rpy="0 1 0" />
+            <visual>
+                <geometry>
+                   <cylinder length="${back_pipe_length}" radius="${pipe_radius}"/>
+                </geometry>
+                 <origin  xyz="-0.56 -0.7 0.6" rpy="2.4 0 0" />
+                <material name="white"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${back_pipe_length}" radius="${pipe_radius}"/>
+               </geometry>
+                <origin  xyz="-0.56 -0.7 0.6" rpy="2.4 0 0" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="1" r="${pipe_radius}" h="${pipe_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="base_to_back_right_pipe" type="fixed">
+           <parent link="base_link"/>
+           <child link="back_right_pipe"/>
+           <origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+           <axis xyz="1 1 1" />
+       </joint>
+
+<link name="back_right_wheel">
+         <origin xyz="0 0.1 1" rpy="0 1 0"  />
+            <visual>
+                <geometry>
+                  <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+                </geometry>
+                 <origin xyz="-0.65 -1 ${wheel_radius}" rpy="1.57 0 1.57"/>
+                <material name="black"/>
+            </visual>
+           <collision>
+               <geometry>
+                   <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
+               </geometry>
+               <origin xyz="-0.65 -1 ${wheel_radius}" rpy="1.57 0 1.57" />
+           </collision>
+<inertial>
+           <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_length}"/>
+</inertial>
+       </link>
+   
+       <joint name="back_right_pipe_to_back_right_wheel" type="continuous">
+           <parent link="back_right_pipe"/>
+           <child link="back_right_wheel"/>
+           <limit effort="100" velocity="100"/>
+           <joint_properties damping="0.0" friction="0.0"/>
+           <dynamics damping="50" friction="1"/>
+           <axis xyz="1 0 0" />
+           <origin rpy="0 0 0" xyz="0.01 -0.005 0"/>
+       </joint>
+
+<transmission name="back_right_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="back_right_pipe_to_back_right_wheel">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="back_right_motor"/>
+    <mechanicalReduction>1</mechanicalReduction>
+    <motorTorqueConstant>1</motorTorqueConstant>
+</transmission>-->
+
+
+
+
+

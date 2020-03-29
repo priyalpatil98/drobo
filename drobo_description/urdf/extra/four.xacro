@@ -1,0 +1,322 @@
+<?xml version="1.0"?>
+
+<robot name="four" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<xacro:property name="radius" value="0.075" />
+<xacro:property name="length" value="0.06" />
+
+
+   <xacro:include filename="$(find drobo_description)/urdf/materials.xacro" />
+    <!-- <xacro:include filename="$(find dec_description)/urdf/kinect.xacro" /> -->
+<!-- 
+<xacro:include filename="$(find dec_description)/urdf/four.gazebo" />
+-->
+<!--
+<gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>/MYROBOT</robotNamespace>
+  </plugin>
+</gazebo>
+
+-->
+<!-- ros_control plugin 
+<gazebo>
+<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.
+so">
+<robotNamespace>/four</robotNamespace>
+</plugin>
+</gazebo>
+ ///////////////////////////////////////////////////////////////////-->
+
+
+<!--  MATERIALS  -->
+  <material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+
+<material name="red">
+    <color rgba="0.8 0 0 1"/>
+  </material>
+
+
+<material name="pink">
+    <color rgba="0.8 0 1 0.5"/>
+  </material>
+
+
+    <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+
+
+
+<!--///////////////////////////////////////////////////////////////////////-->
+<!--  VISUAL -->
+  <link name="chassis">
+    <visual>
+      <geometry>
+        <box size="0.6 0.45 0.50"/>
+       </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.275"/>
+       <material name="blue"/>
+    </visual>
+<!--  COLLISION -->
+    <collision>
+      <geometry>
+       <box size="0.6 0.45 0.50"/>
+       
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.275"/>
+    </collision>
+<!--  INERTIAL -->
+    <inertial>
+      <mass value="5.0"/>
+      
+      <inertia
+          ixx="0.2541" ixy="0" ixz="0"
+          iyy="1.1718" iyz="0"
+          izz="0.9270"
+      />
+    </inertial>
+  
+  </link>
+
+
+ <!--////////////////////////////////////////////////////////////////////////////////////////-->
+<!--  JOINT WHEEL1 CHASSIS  -->
+ <joint name="chassis_to_wheel1" type="continuous">
+  <axis xyz="0 1 0"/> 
+<origin rpy="0 0 0" xyz="0.17 0.255 0.075"/>
+ <limit effort="100" velocity="100"/>
+ <joint_properties damping="0.0" friction="0.0"/>
+    <parent link="chassis"/> 
+    <child link="wheel1"/> 
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+
+
+<!--///////////////////////////////////////////////////////////////////////-->
+<!--  VISUAL  -->
+  <link name="wheel1">
+    <visual>
+      <geometry>
+      <cylinder radius="${radius}" length="${length}"/>
+         
+      </geometry>
+       <origin rpy="0 1.57075 1.57075" xyz="0 0 0"/>
+        <material name="white"/>
+    </visual>
+<!--  COLLISION -->
+     <collision>
+     <origin rpy="0 1.57075 1.57075" xyz="0 0 0"/>
+      <geometry>
+         <cylinder radius="${radius}" length="${length}"/>
+      </geometry>
+    </collision>
+
+<!--  INERTIAL -->
+ <inertial>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+      <mass value="0.4"/>
+      <cylinder_inertia m="0.4" r="0.075" h="0.06"/>
+      <inertia
+        ixx="0.0006825" ixy="0.0" ixz="0.0"
+        iyy="0.0006825" iyz="0.0"
+        izz="0.00045"/>
+    </inertial>
+
+  </link>
+
+ <!--/////////////////////////////////////////////////////////////////////////-->
+<!--  VISUAL  -->
+<link name="wheel2">
+    <visual>
+      <geometry>
+         <cylinder radius="${radius}" length="${length}"/>
+      </geometry>
+       <origin rpy="0 1.57075 1.57075" xyz="0 0 0"/>
+       <material name="white"/>
+    </visual>
+
+<!--  COLLISION -->
+     <collision>
+     <origin rpy="0 1.57075 1.57075" xyz="0 0 0"/>
+      <geometry>
+         <cylinder radius="${radius}" length="${length}"/>
+      </geometry>
+    </collision>
+<!--  INERTIAL -->
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+      <mass value="0.4"/>
+      <cylinder_inertia m="0.4" r="0.075" h="0.06"/>
+      <inertia
+        ixx="0.0006825" ixy="0.0" ixz="0.0"
+        iyy="0.0006825" iyz="0.0"
+        izz="0.00045"/>
+    </inertial>
+  </link>
+<!--/////////////////////////////////////////////////////////////////////////////////////-->
+<joint name="chassis_to_wheel2" type="continuous">
+    <parent link="chassis"/>
+<origin rpy="0 0 0" xyz="-0.17 0.255 0.075"/>
+<limit effort="100" velocity="100"/>
+ <joint_properties damping="0.0" friction="0.0"/>
+    <child link="wheel2"/>
+    <axis xyz="0 1 0"/>
+       <dynamics damping="50" friction="1"/>
+
+  </joint>
+<!--////////////////////////////////////////////////////////////////////////////////////////-->
+
+<!--  VISUAL  -->
+<link name="wheel3">
+    <visual>
+      <geometry>
+         <cylinder radius="${radius}" length="${length}"/>
+      </geometry>
+       <origin rpy="0 1.57075 1.57075" xyz="0 0 0"/>
+          <material name="white"/>
+    </visual>
+
+<!--  COLLISION -->
+<collision>
+<origin rpy="0 1.57075 1.57075" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="${radius}" length="${length}"/>
+      </geometry>
+    </collision>
+
+<!--  INERTIAL -->
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+      <mass value="0.4"/>
+      <cylinder_inertia m="0.4" r="0.075" h="0.06"/>
+
+      <inertia
+        ixx="0.0006825" ixy="0.0" ixz="0.0"
+        iyy="0.0006825" iyz="0.0"
+        izz="0.00045"/>
+    </inertial>
+  </link>
+<!--////////////////////////////////////////////////////////////////////////////////////////-->
+
+<joint name="chassis_to_wheel3" type="continuous">
+    <parent link="chassis"/>
+    <child link="wheel3"/>
+<axis xyz="0 1 0"/>
+    <limit effort="100" velocity="100"/>
+ <joint_properties damping="0.0" friction="0.0"/>
+   <origin  xyz="0.17 -0.255 0.075"/>
+         <dynamics damping="50" friction="1"/>
+
+  </joint>
+
+<!--////////////////////////////////////////////////////////////////////////////////////////-->
+
+<!--  VISUAL  -->
+<link name="wheel4">
+    <visual>
+      <geometry>
+        <cylinder radius="${radius}" length="${length}"/>
+      </geometry>
+       <origin rpy="0 1.57075 1.57075" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+
+<!--  COLLISION -->
+<collision>
+<origin rpy="0 1.57075 1.57075" xyz="0 0 0"/>
+      <geometry>
+         <cylinder radius="${radius}" length="${length}"/>
+      </geometry>
+    </collision>
+
+<!--  INERTIAL -->
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+      <mass value="0.4"/>
+      <cylinder_inertia m="0.4" r="0.075" h="0.06"/>
+      <inertia
+        ixx="0.0006825" ixy="0.0" ixz="0.0"
+        iyy="0.0006825" iyz="0.0"
+        izz="0.00045"/>
+    </inertial>
+  </link>
+
+<!--////////////////////////////////////////////////////////////////////////////////////////-->
+
+<joint name="chassis_to_wheel4" type="continuous">
+    <parent link="chassis"/>
+    <child link="wheel4"/>
+<limit effort="100" velocity="100"/>
+ <joint_properties damping="0.0" friction="0.0"/>
+    <axis xyz="0 1 0"/>
+ <origin  xyz="-0.17 -0.255 0.075"/>
+   
+        <dynamics damping="50" friction="1"/>
+
+  </joint>
+
+<!--////////////////////////////////////////////////////////////////////////////////////////-->
+
+<!--  VISUAL  -->
+  <link name="kinect">
+
+
+    <visual>
+      <geometry>
+        <mesh filename="package://dec_description/meshes/kinect.dae"/>
+       </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      
+    </visual>
+    </link>
+
+     <joint name="chassis_to_kinect" type="fixed">
+  <axis xyz="0 0 0"/> 
+<origin rpy="0 0 1.5707" xyz="0.30 0 0.5631"/>
+ 
+    <parent link="chassis"/> 
+    <child link="kinect"/>
+        
+   
+  </joint>
+
+<!--  
+    <gazebo>
+ <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+          <baseline>0.2</baseline>
+          <alwaysOn>true</alwaysOn>
+          <!Keep this zero, update_rate in the parent <sensor> tag
+            will control the frame rate. 
+          <updateRate>0.0</updateRate>
+          <cameraName>camera_ir</cameraName>
+          <imageTopicName>/camera/depth/image_raw</imageTopicName>
+          <cameraInfoTopicName>/camera/depth/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
+          <depthImageInfoTopicName>/camera/depth/camera_info</depthImageInfoTopicName>
+          <pointCloudTopicName>/camera/depth/points</pointCloudTopicName>
+          <frameName>camera_link</frameName>
+          <pointCloudCutoff>0.05</pointCloudCutoff>
+          <distortionK1>0</distortionK1>
+          <distortionK2>0</distortionK2>
+          <distortionK3>0</distortionK3>
+          <distortionT1>0</distortionT1>
+          <distortionT2>0</distortionT2>
+          <CxPrime>0</CxPrime>
+          <Cx>0</Cx>
+          <Cy>0</Cy>
+          <focalLength>0</focalLength>
+          <hackBaseline>0</hackBaseline>
+        </plugin>
+
+
+        </gazebo>
+-->
+      
+
+
+
+</robot>
+

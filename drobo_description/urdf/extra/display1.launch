@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+
+  
+
+<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find drobo_description)/urdf/four.xacro'" />
+	<!-- Setting gui parameter to true for display joint slider -->
+<param name="use_gui" value="true"/>
+
+  <!-- send fake joint values -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="True"/>
+  </node>
+
+  <!-- Combine joint values -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+
+  <!-- Show in Rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz"/>
+  <!--node name="rviz" pkg="rviz" type="rviz" args="-d $(find dec_description)/launch/urdf.rviz"/-->
+
+</launch>

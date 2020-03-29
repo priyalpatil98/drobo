@@ -1,0 +1,853 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://playerstage.sourceforge.net/gazebo/xmlschema/#xacro"
+       name="drobo">
+//base link-----------------------------------------------
+  <link name="base_link">
+    <inertial>
+ <origin
+        xyz="0 0 1"
+        rpy="0 0 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+<visual>
+      <origin
+        xyz="0 0 1"
+        rpy="1.5707963267949 0 0" />
+      <geometry>
+        <box size= "1 0.2 1"/>
+      </geometry>
+      <material
+        name="blue">
+        <color
+          rgba="1 1 255 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="0 0 1"
+        rpy="1.5707963267949 0 0" />
+      <geometry>
+        <box size= "1 0.2 1"/>
+      </geometry>
+</collision>
+ <gazebo reference="base_link">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  </link>
+
+//front pipe left----------------------------------------------------------------
+<link
+    name="front_left_pipe">
+    <inertial>
+      <origin
+        xyz="0 1 1"
+        rpy="0 0 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+ <visual>
+      <origin
+        xyz="0.56 0.6 0.85"
+        rpy="-2.3 0 0" />
+
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+      <material
+        name="white">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="0.56 0.6 0.85"
+        rpy="-2.3 0 0" />
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+</collision>
+  </link>
+
+<link
+    name="front_left_pipe1">
+    <inertial>
+      <origin
+        xyz="0 1 1"
+        rpy="0 0 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+ <visual>
+      <origin
+        xyz="0.56 1 0.45"
+        rpy="-2.3 0 0" />
+
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+      <material
+        name="white">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="0.56 1 0.45"
+        rpy="-2.3 0 0" />
+
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+</collision>
+  </link>
+
+<link
+    name="front_left_pipe2">
+    <inertial>
+      <origin
+        xyz="0 1 1"
+        rpy="0 0 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+ <visual>
+      <origin
+        xyz="0.56 0.7 0.45"
+        rpy="2.3 0 0" />
+
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+      <material
+        name="white">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="0.56 0.7 0.45"
+        rpy="2.3 0 0" />
+
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+</collision>
+  </link>
+
+<link
+    name="front_left_wheel1">
+    <inertial>
+      <origin
+        xyz="0 0.1 1"
+        rpy="0 1 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+<visual>
+      <origin
+        xyz="0.65 1.2 0.3"
+        rpy="1.57 0 1.57" />
+
+      <geometry>
+       <cylinder length="0.1" radius="0.3"/>
+      </geometry>
+      <material
+        name="Grey">
+        <color
+          rgba="128 128 128 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="0.65 1.2 0.3"
+        rpy="1.57 0 1.57" />
+
+      <geometry>
+       <cylinder length="0.1" radius="0.3"/>
+      </geometry>
+</collision>
+  </link>
+
+<gazebo reference="front_left_pipe1_to_front_left_wheel1">
+         <mu1 value="200.0"/>
+         <mu2 value="100.0"/>
+         <kp value="10000000.0" />
+         <kd value="1.0" />
+         <material>Gazebo/Grey</material>
+</gazebo>
+
+<link
+    name="front_left_wheel2">
+    <inertial>
+      <origin xyz="0 0.1 1" rpy="0 1 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+ <visual>
+        
+      <origin xyz="0.65 0.6 0.3" rpy="1.57 0 1.57" />
+
+      <geometry>
+       <cylinder length="0.1" radius="0.3"/>
+      </geometry>
+      <material
+        name="white">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="0.65 0.6 0.3"
+        rpy="1.57 0 1.57" />
+
+      <geometry>
+       <cylinder length="0.1" radius="0.3"/>
+      </geometry>
+</collision>
+  </link>
+
+<gazebo reference="front_left_pipe2_to_front_left_wheel2">
+         <mu1 value="200.0"/>
+         <mu2 value="100.0"/>
+         <kp value="10000000.0" />
+         <kd value="1.0" />
+         <material>Gazebo/Grey</material>
+</gazebo>
+
+<joint name="base_to_front_left_pipe" type="fixed">
+<parent link="base_link"/>
+<child link="front_left_pipe" />
+<origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+<axis xyz="1 0 0" />
+</joint>
+
+<joint name="front_left_pipe_to_front_left_pipe1" type="fixed">
+<parent link="front_left_pipe"/>
+<child link="front_left_pipe1" />
+<origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+<axis xyz="1 0 0" />
+</joint>
+
+<joint name="front_left_pipe_to_front_left_pipe2" type="fixed">
+<parent link="front_left_pipe"/>
+<child link="front_left_pipe2" />
+<origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+<axis xyz="1 0 0" />
+</joint>
+
+<joint name="front_left_pipe1_to_front_left_wheel1" type="continuous">
+<parent link="front_left_pipe1"/>
+<child link="front_left_wheel1" />
+<limit effort="100" velocity="100"/>
+ <joint_properties damping="0.0" friction="0.0"/>
+<dynamics damping="50" friction="1"/>
+<origin rpy="0 0 0" xyz="0.01 -0.005 0"/>
+<axis xyz="1 0 0" />
+</joint>
+
+ <transmission name="front_left_wheel1_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="$front_left_wheel1_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="front_left_pipe1_to_front_left_wheel1">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+<joint name="front_left_pipe2_to_front_left_wheel2" type="continuous">
+<parent link="front_left_pipe2"/>
+<child link="front_left_wheel2" />
+<limit effort="100" velocity="100"/>
+ <joint_properties damping="0.0" friction="0.0"/>
+<dynamics damping="50" friction="1"/>
+<origin rpy="0 0 0" xyz="0.01 -0.005 0"/>
+<axis xyz="1 0 0" />
+</joint>
+
+ <transmission name="front_left_wheel2_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="$front_left_wheel2_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="front_left_pipe2_to_front_left_wheel2">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+//back pipe right--------------------------------------------------------------------
+<link
+    name="back_right_pipe">
+    <inertial>
+      <origin
+        xyz="0 0.1 1"
+        rpy="0 1 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+<visual>
+      <origin
+        xyz="-0.56 -0.7 0.7"
+        rpy="2.4 0 0" />
+
+      <geometry>
+        <cylinder length="0.9" radius="0.05"/>
+      </geometry>
+      <material
+        name="white">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="-0.56 -0.7 0.7"
+        rpy="2.4 0 0" />
+      <geometry>
+        <cylinder length="0.9" radius="0.05"/>
+      </geometry>
+</collision>
+  </link>
+
+<link
+    name="back_right_wheel">
+    <inertial>
+      <origin
+        xyz="0 0.1 1"
+        rpy="0 1 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+ <visual>
+      <origin
+        xyz="-0.65 -1 0.3"
+        rpy="1.57 0 1.57" />
+      <geometry>
+       <cylinder length="0.1" radius="0.3"/>
+      </geometry>
+      <material
+        name="white">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="-0.65 -1 0.3"
+        rpy="1.57 0 1.57" />
+
+      <geometry>
+       <cylinder length="0.1" radius="0.3"/>
+      </geometry>
+</collision>
+  </link>
+
+<gazebo reference="back_right_pipe_to_back_right_wheel">
+         <mu1 value="200.0"/>
+         <mu2 value="100.0"/>
+         <kp value="10000000.0" />
+         <kd value="1.0" />
+         <material>Gazebo/Grey</material>
+</gazebo>
+
+<joint name="base_to_back_right_pipe" type="fixed">
+<parent link="base_link"/>
+<child link="back_right_pipe" />
+<origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+<axis xyz="1 1 1" />
+</joint>
+
+<joint name="back_right_pipe_to_back_right_wheel" type="continuous">
+<parent link="back_right_pipe"/>
+<child link="back_right_wheel" />
+<limit effort="100" velocity="100"/>
+ <joint_properties damping="0.0" friction="0.0"/>
+<dynamics damping="50" friction="1"/>
+<origin rpy="0 0 0" xyz="0.01 -0.005 0"/>
+<axis xyz="1 0 0" />
+</joint>
+
+ <transmission name="back_right_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="$back_right_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="back_right_pipe_to_back_right_wheel">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+//front pipe right----------------------------------------------------------------
+<link
+    name="front_right_pipe">
+    <inertial>
+      <origin
+        xyz="0 0.1 1"
+        rpy="0 1 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+<visual>
+      <origin
+        xyz="-0.56 0.6 0.85"
+        rpy="-2.3 0 0" />
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+      <material
+        name="white">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="-0.56 0.6 0.85"
+        rpy="-2.3 0 0" />
+
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+</collision>
+  </link>
+
+<link
+    name="front_right_pipe1">
+    <inertial>
+      <origin
+        xyz="0 1 1"
+        rpy="0 0 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+<visual>
+      <origin
+        xyz="-0.56 1 0.45"
+        rpy="-2.3 0 0" />
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+      <material
+        name="white">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="-0.56 1 0.45"
+        rpy="-2.3 0 0" />
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+</collision>
+  </link>
+
+
+
+<link
+    name="front_right_pipe2">
+    <inertial>
+      <origin
+        xyz="0 1 1"
+        rpy="0 0 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+<visual>
+      <origin
+        xyz="-0.56 0.7 0.45"
+        rpy="2.3 0 0" />
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+      <material
+        name="white">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="-0.56 0.7 0.45"
+        rpy="2.3 0 0" />
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+</collision>
+  </link>
+
+<link
+    name="front_right_wheel1">
+    <inertial>
+      <origin
+        xyz="0 0.1 1"
+        rpy="0 1 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+<visual>
+      <origin
+        xyz="-0.65 1.2 0.3"
+        rpy="1.57 0 1.57" />
+
+      <geometry>
+       <cylinder length="0.1" radius="0.3"/>
+      </geometry>
+      <material
+        name="white">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="-0.65 1.2 0.3"
+        rpy="1.57 0 1.57" />
+      <geometry>
+       <cylinder length="0.1" radius="0.3"/>
+      </geometry>
+</collision>
+  </link>
+
+<gazebo reference="front_right_pipe1_to_front_right_wheel1">
+         <mu1 value="200.0"/>
+         <mu2 value="100.0"/>
+         <kp value="10000000.0" />
+         <kd value="1.0" />
+         <material>Gazebo/Grey</material>
+</gazebo>
+
+<link
+    name="front_right_wheel2">
+    <inertial>
+      <origin
+        xyz="0 0.1 1"
+        rpy="0 1 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+<visual>
+      <origin
+        xyz="-0.65 0.6 0.3"
+        rpy="1.57 0 1.57" />
+
+      <geometry>
+       <cylinder length="0.1" radius="0.3"/>
+      </geometry>
+      <material
+        name="white">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="-0.65 0.6 0.3"
+        rpy="1.57 0 1.57" />
+      <geometry>
+       <cylinder length="0.1" radius="0.3"/>
+      </geometry>
+</collision>
+  </link>
+
+<gazebo reference="front_right_pipe2_to_front_right_wheel2">
+         <mu1 value="200.0"/>
+         <mu2 value="100.0"/>
+         <kp value="10000000.0" />
+         <kd value="1.0" />
+         <material>Gazebo/Grey</material>
+</gazebo>
+
+
+
+<joint name="base_to_front_right_pipe" type="fixed">
+<parent link="base_link"/>
+<child link="front_right_pipe" />
+<origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+<axis xyz="1 1 1" />
+</joint>
+
+<joint name="front_right_pipe_to_front_right_pipe1" type="fixed">
+<parent link="front_right_pipe"/>
+<child link="front_right_pipe1" />
+<origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+<axis xyz="1 10 1" />
+</joint>
+
+<joint name="front_right_pipe_to_front_right_pipe2" type="fixed">
+<parent link="front_right_pipe"/>
+<child link="front_right_pipe2" />
+<origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+<axis xyz="1 10 1" />
+</joint>
+
+<joint name="front_right_pipe1_to_front_right_wheel1" type="continuous">
+<parent link="front_right_pipe1"/>
+<child link="front_right_wheel1" />
+<limit effort="100" velocity="100"/>
+ <joint_properties damping="0.0" friction="0.0"/>
+<dynamics damping="50" friction="1"/>
+<origin rpy="0 0 0" xyz="0.01 -0.005 0"/>
+<axis xyz="1 0 0" />
+</joint>
+
+ <transmission name="front_right_wheel1_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="$front_right_wheel1_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="front_right_pipe1_to_front_right_wheel1">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+<joint name="front_right_pipe2_to_front_right_wheel2" type="continuous">
+<parent link="front_right_pipe2"/>
+<child link="front_right_wheel2" />
+<limit effort="100" velocity="100"/>
+ <joint_properties damping="0.0" friction="0.0"/>
+<dynamics damping="50" friction="1"/>
+<origin rpy="0 0 0" xyz="0.01 -0.005 0"/>
+<axis xyz="1 0 0" />
+</joint>
+
+ <transmission name="front_right_wheel2_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="$front_right_wheel2_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="front_right_pipe2_to_front_right_wheel2">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+//back pipe left-------------------------------------------------------------
+<link
+    name="back_left_pipe">
+    <inertial>
+      <origin
+        xyz="0 0.1 1"
+        rpy="0 1 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+ <visual>
+      <origin
+        xyz="0.56 -0.7 0.7"
+        rpy="2.4 0 0" />
+
+      <geometry>
+        <cylinder length="0.9" radius="0.05"/>
+      </geometry>
+       <material
+        name="white">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="0.56 -0.7 0.7"
+        rpy="2.4 0 0" />
+
+      <geometry>
+        <cylinder length="0.9" radius="0.05"/>
+      </geometry>
+</collision>
+  </link>
+
+<link
+    name="back_left_wheel">
+    <inertial>
+      <origin
+        xyz="0 0.1 1"
+        rpy="0 1 0" />
+      <mass
+        value="4.8489" />
+      <inertia
+        ixx="0.14684"
+        ixy="0.000360999999999999"
+        ixz="0.014859"
+        iyy="0.24756"
+        iyz="4.36779999999948E-05"
+        izz="0.33302" />
+    </inertial>
+ <visual>
+      <origin
+        xyz="0.65 -1 0.3"
+        rpy="1.57 0 1.57" />
+
+      <geometry>
+        <cylinder length="0.1" radius="0.3"/>
+      </geometry>
+       <material
+        name="white">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+<collision>
+      <origin
+        xyz="0.65 -1 0.3"
+        rpy="1.57 0 1.57" />
+
+      <geometry>
+        <cylinder length="0.1" radius="0.3"/>
+      </geometry>
+</collision>
+  </link>
+
+<gazebo reference="back_left_pipe_to_back_left_wheel">
+         <mu1 value="200.0"/>
+         <mu2 value="100.0"/>
+         <kp value="10000000.0" />
+         <kd value="1.0" />
+         <material>Gazebo/Grey</material>
+</gazebo>
+
+<joint name="base_to_back_left_pipe" type="fixed">
+<parent link="base_link"/>
+<child link="back_left_pipe" />
+<origin rpy="0 0 0" xyz="0.005 0.02 0.02"/>
+<axis xyz="0 1 1" />
+</joint>
+
+<joint name="back_left_pipe_to_back_left_wheel" type="continuous">
+<parent link="back_left_pipe"/>
+<child link="back_left_wheel" />
+<limit effort="100" velocity="100"/>
+ <joint_properties damping="0.0" friction="0.0"/>
+<dynamics damping="50" friction="1"/>
+<origin rpy="0 0 0" xyz="0.01 -0.005 0"/>
+<axis xyz="1 0 0" />
+</joint>
+
+ <transmission name="back_left_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="back_left_pipe_to_back_left_wheel">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="back_left_wheel_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+-----------------------------------------------------------------------------
+
+<gazebo>
+ <static>false</static>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/drobo</robotNamespace>
+	<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+        <legacyModeNS>true</legacyModeNS>
+     </plugin>
+    </gazebo>
+
+</robot>
+

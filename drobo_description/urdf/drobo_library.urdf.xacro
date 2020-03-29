@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<robot name="drobo" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!--
+  The complete drobo library of xacros for easy reference
+ -->
+  <!-- General -->
+ <!-- <xacro:include filename="$(find drobo_description)/urdf/materials.xacro"/>-->
+  <xacro:include filename="$(find drobo_description)/urdf/drobo_properties.urdf.xacro"/> 
+
+  <!-- 3D Sensors -->
+
+
+  <xacro:include filename="$(find drobo_description)/urdf/kinect.urdf.xacro"/> 
+
+</robot>

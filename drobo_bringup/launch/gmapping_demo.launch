@@ -1,0 +1,14 @@
+<launch>
+  <!-- https://github.com/ros-planning/navigation/issues/206 -->
+  <include file="$(find drobo_bringup)/launch/3dsensor.launch">
+    <arg name="rgb_processing" value="false" />
+    <arg name="depth_registration" value="false" />
+    <arg name="depth_processing" value="false" />
+
+    <arg name="scan_topic" value="/scan" />
+  </include>
+
+  <include file="$(find drobo_bringup)/launch/includes/gmapping.launch.xml"/>
+  <include file="$(find drobo_gazebo)/launch/includes/move_base_launch.xml"/>
+
+</launch>

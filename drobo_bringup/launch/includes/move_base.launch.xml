@@ -1,0 +1,35 @@
+
+<launch>
+  <!-- mobile base nodelet manager -->
+  <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>
+  
+  <!-- mobile base 
+  <arg name="serialport"/>-->
+  <arg name="base"/>
+
+  <include file="$(find drobo_bringup)/launch/includes/bot/mobile_base_launch.xml">
+   <!-- <arg name="serialport" value="$(arg serialport)"/>-->
+    <arg name="manager" value="mobile_base_nodelet_manager"/>
+  </include>
+  
+  <!-- velocity commands multiplexer 
+  <node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager">
+    <param name="yaml_cfg_file" value="$(find turtlebot_bringup)/param/mux.yaml"/>
+    <remap from="cmd_vel_mux/output" to="mobile_base/commands/velocity"/>
+  </node>-->
+
+  <arg name="odom_topic" default="odom" /> 
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find drobo_bringup)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find drobo_bringup)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find drobo_bringup)/param/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find drobo_bringup)/param/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find drobo_bringup)/param/base_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find drobo_bringup)/param/dwa_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find drobo_bringup)/param/move_base_params.yaml" command="load" />
+
+    <remap from="cmd_vel" to="/cmd_vel_mux/input/navi"/>
+    <remap from="odom" to="$(arg odom_topic)"/>
+  </node>
+</launch>

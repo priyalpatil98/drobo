@@ -1,0 +1,82 @@
+<launch>
+<arg name="paused" default="false"/>
+<arg name="use_sim_time" default="true"/>
+<arg name="gui" default="true"/>
+<arg name="headless" default="true"/>
+<arg name="debug" default="false"/>
+<arg name="x" default="0.0" />
+<arg name="y" default="0.0" />
+<arg name="z" default="1.0" />
+<arg name="roll" default="0"/>
+<arg name="pitch" default="0"/>
+<arg name="yaw" default="0.0" />
+
+<arg name="model" default="xacro --inorder '$(find drobo_description)/urdf/drobo.xacro'"/>
+
+
+
+<!-- We resume the logic in empty_world.launch -->
+<include file="$(find gazebo_ros)/launch/empty_world.launch">
+<arg name="world_name" value="$(find drobo_gazebo)/worlds/my_world.sdf"/>
+<!--<arg name="world_name" value="worlds/willowgarage.world"/>-->
+<arg name="debug" value="$(arg debug)" />
+<arg name="gui" value="$(arg gui)" />
+<arg name="paused" value="$(arg paused)"/>
+<arg name="use_sim_time" value="$(arg use_sim_time)"/>
+<arg name="headless" value="$(arg headless)"/>
+</include>
+<param name="robot_description" command="xacro --inorder '$(find drobo_description)/urdf/drobo.xacro'" />
+<!--<param name="robot_description" textfile="$(find drobo_description)/urdf/drobo.urdf" />-->
+<rosparam file="$(find drobo_bringup)/param/diff_drive.yaml" command="load"/>
+<rosparam file="$(find drobo_bringup)/param/teleop.yaml" command="load"/>
+<rosparam file="$(find drobo_bringup)/param/gazebo_ros_control_params.yaml" command="load"/>
+
+
+<node name="controller" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen" args="diff_drive_control
+                              joint_state_controller 
+                              front_left_wheel1_velocity_controller 
+                              front_left_wheel2_velocity_controller 
+                              front_right_wheel1_velocity_controller 
+                              front_right_wheel2_velocity_controller 
+                              back_left_wheel_velocity_controller 
+                              back_right_wheel_velocity_controller"/>
+
+<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+respawn="false" output="screen"
+args="-urdf -model drobo -param robot_description"/>
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher" output="screen">
+    <param name="publish_frequency" type="double" value="30.0"/>
+  </node> 
+
+<!--<node name="rviz" pkg="rviz" type="rviz" args="-d $(find drobo_bringup)/rviz/drobo.rviz" required="true"/>-->
+
+  <!-- Velocity muxer 
+  <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>
+  <node pkg="nodelet" type="nodelet" name="cmd_vel_mux"
+        args="load yocs_cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager">
+    <param name="yaml_cfg_file" value="$(find drobo_bringup)/param/mux.yaml" />
+    <remap from="cmd_vel_mux/output" to="/cmd_vel"/>
+  </node>-->
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen"/>
+
+
+
+<!--<node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+<param name="default_topic" value="/cmd_vel"/>
+</node>-->
+
+<!-- Fake laser -->
+  <node pkg="nodelet" type="nodelet" name="laserscan_nodelet_manager" args="manager"/>
+  <node pkg="nodelet" type="nodelet" name="depthimage_to_laserscan"
+        args="load depthimage_to_laserscan/DepthImageToLaserScanNodelet laserscan_nodelet_manager">
+    <param name="scan_height" value="10"/>
+    <param name="output_frame_id" value="/camera_depth_frame"/>
+    <param name="range_min" value="0.45"/>
+    <remap from="image" to="/camera/depth/image_raw"/>
+    <remap from="scan" to="/scan"/>
+  </node>
+
+</launch>

@@ -1,0 +1,80 @@
+//Starting lines of urdf----------------------------------
+<?xml version="1.0"?>
+    <robot name="myfirst">
+      <link name="base_link">
+        <visual>
+          <geometry>
+            <cylinder length="0.6" radius="0.2"/>
+          </geometry>
+        </visual>
+      </link>
+   </robot> 
+
+//Base link to link 1 using joint 1------------------------
+ <?xml version="1.0"?>
+    <robot name="multipleshapes">
+      <link name="base_link">
+        <visual>
+          <geometry>
+            <cylinder length="0.6" radius="0.2"/>
+          </geometry>
+        </visual>
+      </link>
+   
+     <link name="right_leg">
+       <visual>
+         <geometry>
+           <box size="0.6 0.1 0.2"/>
+         </geometry>
+       </visual>
+     </link>
+   
+     <joint name="base_to_right_leg" type="fixed">
+      <parent link="base_link"/>
+       <child link="right_leg"/>
+     </joint>
+   
+   </robot>
+
+
+//Shapes syntax-------------------------------------------------
+<link name="head">
+        <visual>
+        <geometry>
+           <sphere radius="0.2"/>
+          </geometry>
+          <material name="white"/>
+        </visual>
+      </link>
+
+      <link name="base_link">
+        <visual>
+          <geometry>
+            <cylinder length="0.6" radius="0.2"/>
+          </geometry>
+        </visual>
+      </link>
+
+ <link name="right_leg">
+       <visual>
+         <geometry>
+           <box size="0.6 0.1 0.2"/>
+         </geometry>
+       </visual>
+     </link>
+
+<link name="left_gripper">
+        <visual>
+          <origin rpy="0.0 0 0" xyz="0 0 0"/>
+          <geometry>
+            <mesh filename="package://urdf_tutorial/meshes/l_finger.dae"/>
+          </geometry>
+        </visual>
+      </link>
+
+//Joint syntax-----------------------------------------------------------
+<joint name="tobox" type="fixed">
+      <parent link="head"/>
+      <child link="box"/>
+      <origin xyz="0.1814 0 0.1414"/>
+    </joint>
